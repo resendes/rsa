@@ -31,7 +31,10 @@ public class Key {
 
         BigInteger e =  relativePrime(totient, this.length*2);
 
-        System.out.println(e);
+        BigInteger d = euclidesExt(e, totient, BigInteger.ONE);
+
+        if (e.equals(d))
+            System.out.println(e);
 
         Properties publicKey = new Properties();
         publicKey.setProperty("n", N.toString());
@@ -39,8 +42,27 @@ public class Key {
         FileOutputStream publicKeyFile = new FileOutputStream(this.publicKey);
         publicKey.store(publicKeyFile, null);
 
+        Properties privateKey = new Properties();
+        privateKey.setProperty("n", N.toString());
+        privateKey.setProperty("d", d.toString());
+        FileOutputStream privateKeyFile = new FileOutputStream(this.privateKey);
+        publicKey.store(privateKeyFile, null);
+
         return true;
 
+    }
+
+    BigInteger euclidesExt(BigInteger a, BigInteger b, BigInteger c)
+    {
+        BigInteger r;
+
+        r = b.mod(a);
+
+        if (r.equals(BigInteger.ZERO)) {
+            return c.divide(a).mod(b.divide(a));	// retorna (c/a) % (b/a)
+        }
+
+        return ((euclidesExt(r, a, c.negate()).multiply(b).add(c)).divide(a.mod(b)));
     }
 
     private BigInteger relativePrime(BigInteger totient, int bits) {
@@ -52,7 +74,7 @@ public class Key {
     }
 
     public static void main(String[] args) throws Exception {
-        Key key = new Key(1024,"teste.txt", "");
+        Key key = new Key(1024,"rsa_public.txt", "rsa_private.txt");
         key.generation();
     }
 
