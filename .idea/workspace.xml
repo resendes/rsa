@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="98c77a57-f1de-4ac6-974c-a3357f84e1b3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/rsa/Key.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/rsa/Key.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rsa_private.txt" beforeDir="false" afterPath="$PROJECT_DIR$/rsa_private.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/rsa_public.txt" beforeDir="false" afterPath="$PROJECT_DIR$/rsa_public.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Key.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Key.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -133,7 +130,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1572725592733" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1572726217037" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
