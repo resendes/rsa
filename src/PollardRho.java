@@ -4,7 +4,7 @@ import java.math.BigInteger;
 import java.util.Properties;
 import java.util.Random;
 
-public class PolardRho {
+public class PollardRho {
 
     public static BigInteger factor() throws IOException {
         FileInputStream publicKeyFile = new FileInputStream("rsa_public.txt");
@@ -14,7 +14,7 @@ public class PolardRho {
         BigInteger n = new BigInteger(publicKey.getProperty("n"));
 
         BigInteger x = new BigInteger(n.bitLength(), new Random()), y = new BigInteger(n.bitLength(), new Random()), divisor = BigInteger.ONE;
-        BigInteger maxIterations = n.sqrt();
+        BigInteger maxIterations = n.sqrt().sqrt();
         BigInteger count = BigInteger.ZERO;
         while (divisor.compareTo(BigInteger.ONE) == 0) {
             x = g(x, n);
