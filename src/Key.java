@@ -1,9 +1,7 @@
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.Properties;
+import java.util.Random;
 
 public class Key {
 
@@ -80,27 +78,5 @@ public class Key {
             return a;
         return gcd(b, a.mod(b));
     }
-
-    private static boolean contains(String[] args, String element) {
-        return Arrays.stream(args).anyMatch(element::equals);
-    }
-
-    public static void main(String[] args) throws Exception {
-        if (contains(args, "generate")) {
-            Key.generate(32, "rsa_public.txt", "rsa_private.txt");
-        }
-        if (contains(args, "encrypt_decrypt")) {
-            Rsa.encrypt();
-            Rsa.decrypt();
-        }
-        if (contains(args, "brute_force")) {
-            BruteForce.bruteForcePublicKey().stream().forEach(x -> System.out.println("Força bruta:" + x.toString()));
-        }
-        if (contains(args, "polard_rho")) {
-            System.out.println("Pollard Rho: " + PolardRho.factor());
-        }
-
-    }
-
 
 }

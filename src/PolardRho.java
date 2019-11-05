@@ -14,10 +14,21 @@ public class PolardRho {
         BigInteger n = new BigInteger(publicKey.getProperty("n"));
 
         BigInteger x = new BigInteger(n.bitLength(), new Random()), y = new BigInteger(n.bitLength(), new Random()), divisor = BigInteger.ONE;
+        BigInteger maxIterations = n.sqrt();
+        BigInteger count = BigInteger.ZERO;
         while (divisor.compareTo(BigInteger.ONE) == 0) {
             x = g(x, n);
             y = g(g(y, n), n);
             divisor = gcd(x.subtract(y).abs(), n);
+
+            if (count.compareTo(maxIterations) >  0) {
+                x = new BigInteger(n.bitLength(), new Random());
+                y = new BigInteger(n.bitLength(), new Random());
+                divisor = BigInteger.ONE;
+                count = BigInteger.ZERO;
+            } else {
+                count = count.add(BigInteger.ONE);
+            }
         }
         if (divisor.equals(n))
             return null;
