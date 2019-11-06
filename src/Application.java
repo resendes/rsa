@@ -16,7 +16,7 @@ public class Application {
     }
 
     public static void main(String[] args) throws Exception {
-        Integer[] keyLengths = {40, 46, 52};
+        Integer[] keyLengths = {42};
         Map<Integer, List<Long>> pollardExecutions = new HashMap<>();
         Map<Integer, List<Long>> generateKeysExecutions = new HashMap<>();
         Map<Integer, List<Long>> bruteForceExecutions = new HashMap<>();
@@ -25,7 +25,7 @@ public class Application {
             generateKeysExecutions.put(keyLengths[j], new ArrayList<>());
             pollardExecutions.put(keyLengths[j], new ArrayList<>());
             bruteForceExecutions.put(keyLengths[j], new ArrayList<>());
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 10; i++) {
                 if (contains(args, "generate")) {
                     long startingAt = System.currentTimeMillis();
                     Key.generate(keyLengths[j], "rsa_public.txt", "rsa_private.txt");
