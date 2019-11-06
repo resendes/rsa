@@ -1,41 +1,52 @@
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Properties;
 import java.util.Random;
 
 public class Key {
 
-    public static void generate(int length, String publicKey, String privateKey) throws Exception {
+    private BigInteger n;
+    private BigInteger d;
+    private BigInteger e;
+    private BigInteger p;
+    private BigInteger q;
+
+    public Key generate(int length) throws Exception {
         //Gerar p
-        BigInteger p = PrimeGenerator.getPrimeNumber(length);
-
+        this.p = PrimeGenerator.getPrimeNumber(length);
         //Gerar q
-        BigInteger q = PrimeGenerator.getPrimeNumber(length);
-
+        this.q = PrimeGenerator.getPrimeNumber(length);
         //Gerar N
-        BigInteger N = p.multiply(q);
-
+        BigInteger N = this.p.multiply(this.q);
         //Gerar (p-1)(q-1)
-        BigInteger phi = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
-
+        BigInteger phi = this.p.subtract(BigInteger.ONE).multiply(this.q.subtract(BigInteger.ONE));
         //Gerar e
         BigInteger e = relativePrime(phi);
-
         //Gerar d
         BigInteger d = extendedGcd(e, phi);
 
+        this.n = N;
+        this.e = e;
+        this.d = d;
+
+        storeKeys();
+
+        return this;
+    }
+
+    private void storeKeys() throws IOException {
         Properties publicKeyProp = new Properties();
-        publicKeyProp.setProperty("n", N.toString());
-        publicKeyProp.setProperty("e", e.toString());
-        FileOutputStream publicKeyFile = new FileOutputStream(publicKey);
+        publicKeyProp.setProperty("n", this.n.toString());
+        publicKeyProp.setProperty("e", this.e.toString());
+        FileOutputStream publicKeyFile = new FileOutputStream("rsa_public.txt");
         publicKeyProp.store(publicKeyFile, null);
 
         Properties privateKeyProp = new Properties();
-        privateKeyProp.setProperty("n", N.toString());
-        privateKeyProp.setProperty("d", d.toString());
-        FileOutputStream privateKeyFile = new FileOutputStream(privateKey);
+        privateKeyProp.setProperty("n", this.n.toString());
+        privateKeyProp.setProperty("d", this.d.toString());
+        FileOutputStream privateKeyFile = new FileOutputStream("rsa_private.txt");
         privateKeyProp.store(privateKeyFile, null);
-
     }
 
     private static BigInteger extendedGcd(BigInteger a, BigInteger b) {
@@ -79,4 +90,48 @@ public class Key {
         return gcd(b, a.mod(b));
     }
 
+    public BigInteger getP() {
+        return p;
+    }
+
+    public Key setP(BigInteger p) {
+        this.p = p;
+        return this;
+    }
+
+    public BigInteger getQ() {
+        return q;
+    }
+
+    public Key setQ(BigInteger q) {
+        this.q = q;
+        return this;
+    }
+
+    public BigInteger getN() {
+        return n;
+    }
+
+    public Key setN(BigInteger n) {
+        this.n = n;
+        return this;
+    }
+
+    public BigInteger getD() {
+        return d;
+    }
+
+    public Key setD(BigInteger d) {
+        this.d = d;
+        return this;
+    }
+
+    public BigInteger getE() {
+        return e;
+    }
+
+    public Key setE(BigInteger e) {
+        this.e = e;
+        return this;
+    }
 }

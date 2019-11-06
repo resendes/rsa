@@ -1,13 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Application {
 
@@ -16,81 +10,72 @@ public class Application {
     }
 
     public static void main(String[] args) throws Exception {
-        Integer[] keyLengths = {42};
-        Map<Integer, List<Long>> pollardExecutions = new HashMap<>();
-        Map<Integer, List<Long>> generateKeysExecutions = new HashMap<>();
-        Map<Integer, List<Long>> bruteForceExecutions = new HashMap<>();
-
-        for (int j = 0; j < keyLengths.length; j++) {
-            generateKeysExecutions.put(keyLengths[j], new ArrayList<>());
-            pollardExecutions.put(keyLengths[j], new ArrayList<>());
-            bruteForceExecutions.put(keyLengths[j], new ArrayList<>());
-            for (int i = 0; i < 10; i++) {
-                if (contains(args, "generate")) {
-                    long startingAt = System.currentTimeMillis();
-                    Key.generate(keyLengths[j], "rsa_public.txt", "rsa_private.txt");
-                    long executionTime = System.currentTimeMillis() - startingAt;
-                    generateKeysExecutions.get(keyLengths[j]).add(executionTime);
-                    System.out.println("Key generated (" + keyLengths[j] + ") in: " + executionTime);
-                }
-                if (contains(args, "encrypt_decrypt")) {
-                    Rsa.encrypt();
-                    Rsa.decrypt();
-                }
-                if (contains(args, "brute_force")) {
-                    long startingAt = System.currentTimeMillis();
-                    BruteForce.bruteForcePublicKey();
-                    long executionTime = System.currentTimeMillis() - startingAt;
-                    bruteForceExecutions.get(keyLengths[j]).add(executionTime);
-                    System.out.println("Brute force (" + keyLengths[j] + ") in: " + (executionTime));
-                }
-                if (contains(args, "pollard_rho")) {
-                    long startingAt = System.currentTimeMillis();
-                    PollardRho.factor();
-                    long executionTime = System.currentTimeMillis() - startingAt;
-                    pollardExecutions.get(keyLengths[j]).add(executionTime);
-                    System.out.println("Pollard Rho (" + keyLengths[j] + ") in: " + (executionTime));
-                }
-            }
-        }
-
         File file = new File("result.txt");
         FileWriter fileWriter = new FileWriter(file, false);
         BufferedWriter writer = new BufferedWriter(fileWriter);
-        // Add some more data.
-        //Write data into another file.
+        try {
+            Integer[] keyLengths = {34};
+            for (int j = 0; j < keyLengths.length; j++) {
+                for (int i = 0; i < 5; i++) {
+                    long startingAt = System.currentTimeMillis();
+                    Key key = new Key().generate(keyLengths[j]);
+                    long executionTime = System.currentTimeMillis() - startingAt;
 
-        generateKeysExecutions.entrySet().stream().forEach(x -> {
-            try {
-                writer.append("Key generation (" + x.getKey() + ")");
-                writer.newLine();
-                writer.append(String.join(", ", x.getValue().stream().map(aLong -> aLong.toString()).collect(Collectors.toList())));
-                writer.newLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        pollardExecutions.entrySet().stream().forEach(x -> {
-            try {
-                writer.append("Pollard Rho (" + x.getKey() + ")");
-                writer.newLine();
-                writer.append(String.join(", ", x.getValue().stream().map(aLong -> aLong.toString()).collect(Collectors.toList())));
-                writer.newLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        bruteForceExecutions.entrySet().stream().forEach(x -> {
-            try {
-                writer.append("Brute Force (" + x.getKey() + ")");
-                writer.newLine();
-                writer.append(String.join(", ", x.getValue().stream().map(aLong -> aLong.toString()).collect(Collectors.toList())));
-                writer.newLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        writer.close();
+                    System.out.println("Key generated (N: " + key.getN().bitLength() + " P: " + key.getP().bitLength() + " Q: " + key.getQ().bitLength() + ") in: " + executionTime);
+                    writer.newLine();
+                    writer.newLine();
+                    writer.append("Key generated in (" + key.getN().bitLength() + "): " + executionTime);
+                    writer.newLine();
+                    writer.append("N: " + key.getN().bitLength() + " P: " + key.getP().bitLength() + " Q: " + key.getQ().bitLength());
+                    writer.newLine();
+                    writer.append("N: " + key.getN().toString());
+                    writer.newLine();
+                    writer.append("P: " + key.getP().toString());
+                    writer.newLine();
+                    writer.append("Q: " + key.getQ().toString());
 
+                    if (contains(args, "encrypt_decrypt")) {
+                        Rsa.encrypt(key.getN(), key.getE());
+                        Rsa.decrypt(key.getN(), key.getD());
+                    }
+                    if (contains(args, "brute_force")) {
+                        startingAt = System.currentTimeMillis();
+                        BruteForce.bruteForcePublicKey(key.getN());
+                        executionTime = System.currentTimeMillis() - startingAt;
+                        System.out.println("Brute force in (" + key.getN().bitLength() + "): " + executionTime);
+                        writer.newLine();
+                        writer.newLine();
+                        writer.append("Brute force in (" + key.getN().bitLength() + "): " + executionTime);
+                        writer.newLine();
+                        writer.append("N: " + key.getN().bitLength() + " P: " + key.getP().bitLength() + " Q: " + key.getQ().bitLength());
+                        writer.newLine();
+                        writer.append("N: " + key.getN().toString());
+                        writer.newLine();
+                        writer.append("P: " + key.getP().toString());
+                        writer.newLine();
+                        writer.append("Q: " + key.getQ().toString());
+                    }
+                    if (contains(args, "pollard_rho")) {
+                        startingAt = System.currentTimeMillis();
+                        PollardRho.factor(key.getN());
+                        executionTime = System.currentTimeMillis() - startingAt;
+                        System.out.println("Pollard-Rho (N: " + key.getN().bitLength() + " P: " + key.getP().bitLength() + " Q: " + key.getQ().bitLength() + ") in: " + executionTime);
+                        writer.newLine();
+                        writer.newLine();
+                        writer.append("Pollard-Rho in (" + key.getN().bitLength() + "): " + executionTime);
+                        writer.newLine();
+                        writer.append("N: " + key.getN().bitLength() + " P: " + key.getP().bitLength() + " Q: " + key.getQ().bitLength());
+                        writer.newLine();
+                        writer.append("N: " + key.getN().toString());
+                        writer.newLine();
+                        writer.append("P: " + key.getP().toString());
+                        writer.newLine();
+                        writer.append("Q: " + key.getQ().toString());
+                    }
+                }
+            }
+        } finally {
+            writer.close();
+        }
     }
 }

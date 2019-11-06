@@ -1,4 +1,9 @@
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Properties;
@@ -7,14 +12,10 @@ public class Rsa {
 
     public static final String FILE_NAME = "message.txt";
 
-    public static void encrypt() throws IOException {
+    public static void encrypt(BigInteger n, BigInteger e) throws IOException {
         FileInputStream publicKeyFile = new FileInputStream("rsa_public.txt");
         Properties publicKey = new Properties();
         publicKey.load(publicKeyFile);
-
-        BigInteger e = new BigInteger(publicKey.getProperty("e"));
-        BigInteger n = new BigInteger(publicKey.getProperty("n"));
-
 
         File fileName = new File(FILE_NAME);
         DataInputStream message = new DataInputStream(new FileInputStream(FILE_NAME));
@@ -47,13 +48,10 @@ public class Rsa {
 
     }
 
-    public static void decrypt() throws IOException {
+    public static void decrypt(BigInteger n, BigInteger d) throws IOException {
         FileInputStream privateKeyFile = new FileInputStream("rsa_private.txt");
         Properties privateKey = new Properties();
         privateKey.load(privateKeyFile);
-
-        BigInteger d = new BigInteger(privateKey.getProperty("d"));
-        BigInteger n = new BigInteger(privateKey.getProperty("n"));
 
         DataInputStream encryptedMessage = new DataInputStream(new FileInputStream(FILE_NAME + ".enc"));
         DataOutputStream decryptedMessage = new DataOutputStream(new FileOutputStream(FILE_NAME + ".dec"));

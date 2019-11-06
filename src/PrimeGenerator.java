@@ -6,6 +6,10 @@ public class PrimeGenerator {
     public static BigInteger getPrimeNumber(int bits) {
         BigInteger n = new BigInteger(bits, new Random());
 
+        while (n.bitLength() < bits) {
+            n = new BigInteger(bits, new Random());
+        }
+
         if (!n.testBit(0)) {
             n = n.add(BigInteger.ONE);
         }
