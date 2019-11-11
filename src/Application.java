@@ -17,7 +17,6 @@ public class Application {
             Integer[] keyLengths = {50};
             for (int j = 0; j < keyLengths.length; j++) {
                 for (int i = 0; i < 12; i++) {
-
                     long startingAt = System.currentTimeMillis();
                     Key key = new Key().generate(keyLengths[j]);
                     long executionTime = System.currentTimeMillis() - startingAt;
