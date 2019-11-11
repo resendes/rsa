@@ -14,9 +14,9 @@ public class Application {
         FileWriter fileWriter = new FileWriter(file, false);
         BufferedWriter writer = new BufferedWriter(fileWriter);
         try {
-            Integer[] keyLengths = {34};
+            Integer[] keyLengths = {50};
             for (int j = 0; j < keyLengths.length; j++) {
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 12; i++) {
 
                     long startingAt = System.currentTimeMillis();
                     Key key = new Key().generate(keyLengths[j]);
